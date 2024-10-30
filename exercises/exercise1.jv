@@ -1,0 +1,63 @@
+// This pipeline, named airportsPipeline, processes airport data from a CSV file on the web to a SQLite file.
+
+// The pipeline structure is defined by chaining blocks with pipes,
+// each pipe passing the output of one block to the next block as input.
+pipeline airportsPipeline {
+
+    // Define the flow of data through the pipeline blocks:
+    // The airportsExtractor block pulls data from a URL,
+    // and the output is successively processed by the other blocks.
+    airportsExtractor
+        -> airportsTextFileInterpreter;
+
+    airportsTextFileInterpreter
+        -> airportsCSVInterpreter
+        -> NameHeaderWriter
+        -> airportsTableInterpreter
+        -> airportsLoader;
+
+    // Block Definitions:
+  
+    // airportsExtractor downloads the CSV file containing airport data from the specified URL.
+    block airportsExtractor oftype HttpExtractor {
+        url: "https://opendata.rhein-kreis-neuss.de/api/explore/v2.1/catalog/datasets/rhein-kreis-neuss-flughafen-weltweit/exports/csv?lang=en&timezone=Europe%2FBerlin&use_labels=true&delimiter=%3B";
+    }
+
+    // airportsTextFileInterpreter converts the binary file from airportsExtractor into a text file.
+    block airportsTextFileInterpreter oftype TextFileInterpreter { }
+
+    // airportsCSVInterpreter reads the text file as a CSV file, using ; as the delimiter.
+    block airportsCSVInterpreter oftype CSVInterpreter {
+        delimiter: ";";
+    }
+
+    // NameHeaderWriter writes a header "Lfd. Nummer" to cell A1.
+    block NameHeaderWriter oftype CellWriter {
+        at: cell A1;
+        write: [
+            "Lfd. Nummer"
+        ];
+    }
+
+    // airportsTableInterpreter converts the CSV data into a structured table, assigning data types to each column.
+    block airportsTableInterpreter oftype TableInterpreter {
+        header: true;
+        columns: [
+            "Lfd. Nummer" oftype integer,
+            "Name des Flughafens" oftype text,
+            "Ort" oftype text,
+            "Land" oftype text,
+            "IATA" oftype text,
+            "ICAO" oftype text,
+            "Latitude" oftype decimal,
+            "Longitude" oftype decimal,
+            "Altitude" oftype integer,
+        ];
+    }
+
+    // airportsLoader saves the structured table data into a SQLite file named "airports.sqlite".
+    block airportsLoader oftype SQLiteLoader {
+        table: "airports";
+        file: "./airports.sqlite";
+    }
+}
