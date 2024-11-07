@@ -38,9 +38,9 @@ Data Type: CSV
 
 ## **Work Packages**
 
-1.Carefully read the project topic and think through the project plan.
-2.Based on project requirements, find relevant and updated datasets.
-3.Download and verify that the dataset contains the expected data.
-4.Create an initial project plan and document it in a project plan markdown (MD) file.
+1. **Carefully read the project topic and think through the project plan.**
+2. **Based on project requirements, find relevant and updated datasets.**
+3. **Download and verify that the dataset contains the expected data.**
+4. **Create an initial project plan and document it in a project plan markdown (MD) file.**
 
 
