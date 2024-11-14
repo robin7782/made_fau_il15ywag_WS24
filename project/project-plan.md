@@ -1,46 +1,31 @@
+# Project Plan
 
-# **Project Plan**
+## Title
+**"American Medical Costs Across Regions: A Comparative Study of Healthcare Expenses in North, Central, and South America"**
 
-## **Title**
-“The Americas” (Projects with Relation to North, Central, or South America)
+## Main Question
+How do demographic factors such as age, BMI, smoking status, and regional differences impact healthcare costs in North America, and how can these findings help improve healthcare access and equity across the Americas?
 
-## **Main Question**
+## Description
+The "American Medical Costs Across Regions" project focuses on understanding the variation in healthcare expenses across different regions, with an emphasis on North America, but also potentially extending insights to Central and South America. This project will examine how demographic factors, lifestyle choices, and regional disparities influence the cost of medical care. The goal is to understand the patterns in medical costs within these regions, identify disparities, and propose strategies to improve healthcare access and cost-efficiency.
 
-How do weather patterns, including rainfall, influence economic and environmental conditions in different regions across the Americas, and how can predictive models improve resource management and cooperation?
+By analyzing relevant datasets that include variables such as age, BMI, smoking status, and region, this project will explore the key drivers of healthcare costs. The analysis will help uncover potential regional inequalities in healthcare expenses, influenced by both socio-economic and lifestyle factors. The goal is to provide insights that can inform healthcare policy, improve access to medical resources, and reduce disparities in healthcare expenses across the Americas.
 
-## **Description**
+## Datasources
 
-This project will explore how weather patterns, particularly rainfall, influence various economic and environmental factors across the Americas (North, Central, and South America). Using data from two key datasets, the USA Rainfall Prediction Dataset (2024-2025) and US Weather Events (2016-2022), we will analyze weather variables such as temperature, humidity, wind speed, and rainfall in order to assess their impact on economic productivity, agriculture, and urban planning in different regions.
+### Datasource-1: Medical Costs Dataset by WAQI786
+This dataset provides detailed information on medical costs across different individuals in the U.S., factoring in demographic details such as age, BMI, smoking status, and region. This dataset is critical in understanding how lifestyle factors (like smoking) and personal health conditions (such as BMI) affect the overall healthcare expenses of individuals. The data is instrumental in analyzing how healthcare costs vary across different demographics and regions within the U.S.
 
-The end goal is to develop predictive models that can forecast rainfall more accurately and explore how such predictions can support better decision-making in areas like agriculture, disaster preparedness, and urban development. The project aims to understand how regions across the Americas can leverage weather prediction models for sustainable growth and regional cooperation, particularly in response to challenges like climate change and extreme weather events.
+- **Metadata URL**: [Medical Costs Dataset Metadata](https://www.kaggle.com/datasets/waqi786/medical-costs)
+- **Data URL**: [Medical Costs Dataset CSV]https://www.kaggle.com/datasets/waqi786/medical-costs?select=medical_costs.csv
+- **Data Type**: CSV
 
-## **Datasources**
+### Datasource-2: Medical Cost Dataset by Satyajeet Rai
+This dataset also focuses on healthcare expenses, with additional factors such as BMI, smoking status, and demographic details like age and region. The dataset includes more than 10,000 records and provides an in-depth analysis of how these variables contribute to the variance in healthcare costs, making it ideal for further comparison across different regions within the Americas.
 
-### **Datasource-1: USA Rainfall Prediction Dataset (2024-2025)**
- 
-
-USA Rainfall Prediction Dataset (2024-2025)
-This dataset provides daily weather data from 20 major cities in the U.S., with important weather variables like temperature, humidity, wind speed, and cloud cover, along with a binary target variable, “Rain Tomorrow,” indicating whether it rained the next day. This dataset will help us understand local weather patterns and their immediate impacts on different U.S. regions. By developing predictive models, we can explore how accurate rainfall forecasts can improve local agricultural and urban planning efforts, with applications for other parts of the Americas.
-
-Metadata URL: https://www.kaggle.com/datasets/waqi786/usa-rainfall-prediction-dataset-2024-2025
-Data URL: https://www.kaggle.com/datasets/waqi786/usa-rainfall-prediction-dataset-2024-2025?select=usa_rain_prediction_dataset_2024_2025.csv
-Data Type: CSV
-
-### **Datasource-2: US Weather Events (2016-2022)**
-
-
-US Weather Events (2016-2022)
-The US Weather Events (2016-2022) dataset records detailed information on weather events across the United States, including rainfall, temperature, and other key weather indicators. It spans a six-year period, allowing for analysis of long-term trends and patterns in rainfall and weather events. By connecting this data with economic and environmental factors, this dataset will contribute to understanding how weather events like rainfall affect regional economies, especially in sectors like agriculture and infrastructure.
-
-Metadata URL: https://www.kaggle.com/datasets/sobhanmoosavi/us-weather-events
-Data URL: https://www.kaggle.com/datasets/sobhanmoosavi/us-weather-events?select=WeatherEvents_Jan2016-Dec2022.csv
-Data Type: CSV
-
-## **Work Packages**
-
-1. **Carefully read the project topic and think through the project plan.**
-2. **Based on project requirements, find relevant and updated datasets.**
-3. **Download and verify that the dataset contains the expected data.**
-4. **Create an initial project plan and document it in a project plan markdown (MD) file.**
+- **Metadata URL**: [Medical Cost Dataset Metadata](https://www.kaggle.com/datasets/satyajeetrai/medical-cost)
+- **Data URL**: [Medical Cost Dataset CSV] https://www.kaggle.com/datasets/satyajeetrai/medical-cost?select=dataset_.csv
+- **Data Type**: CSV
 
 
+## Work Packages
