@@ -1,8 +1,8 @@
 import os
 import pandas as pd
 import sqlite3
-import requests
-from zipfile import ZipFile
+from kaggle.api.kaggle_api_extended import KaggleApi
+
 
 def download_data():
     # Dataset URLs
