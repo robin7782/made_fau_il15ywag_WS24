@@ -1,0 +1,90 @@
+pipeline world_bank_Pipeline {
+
+    // data pipeline
+    world_bank_ex
+        -> world_bank_intpr
+        -> world_bank_sheetp
+        -> world_bank_he_wri
+        -> world_bank_ran
+        -> world_bank_gdp
+        -> world_bank_gdp_loader;
+
+    world_bank_ran  
+        -> WorldBankTableInterpreterBond
+        -> WorldBankDatabaseLoaderBond;
+
+    // source url
+    block world_bank_ex oftype HttpExtractor {
+        url: "https://thedocs.worldbank.org/en/doc/7d852628d96b9411d43e5d36d5dff941-0050062022/original/Graphs-Chapter-5-02082022.xlsx";
+    }
+
+    // XLSX file and interpreter
+    block world_bank_intpr oftype XLSXInterpreter { } 
+
+    // identify sheet number
+    block world_bank_sheetp oftype SheetPicker {
+        sheetName: "Figure S5.1.2";
+    }
+
+    //  row range:
+    block world_bank_ran oftype CellRangeSelector {
+        select: range P2:S45;
+    }
+
+    // rewrite column 
+    block world_bank_he_wri oftype CellWriter {
+        at: range P2:S2;  
+        write: [
+            "Country Code",
+            "Economy",
+            "GDP per Capita",
+            "Bond Issuance Share"
+        ];
+    }
+
+    block world_bank_gdp oftype TableInterpreter {
+        header: true;
+        columns: [
+            "Country Code" oftype CountryCodeValidator,
+            "GDP per Capita" oftype GDPValueValidator, 
+        ];
+    }
+
+    block WorldBankTableInterpreterBond oftype TableInterpreter {
+        header: true;
+        columns: [
+            "Country Code" oftype CountryCodeValidator,
+            "Bond Issuance Share" oftype BondShareValidator  
+        ];
+    }
+
+    // SQLite
+    block world_bank_gdp_loader oftype SQLiteLoader {
+        table: "gdpPerCapita";
+        file: "./country-stats.sqlite";
+    }
+
+    block WorldBankDatabaseLoaderBond oftype SQLiteLoader {
+        table: "bondIssuance";
+        file: "./country-stats.sqlite";
+    }
+
+    // Constraints under pipeline
+    valuetype CountryCodeValidator oftype text {
+        constraints: [isValidCountryCode];
+    }
+
+    valuetype GDPValueValidator oftype decimal {
+        constraints: [isPositiveGDP];
+    }
+
+    valuetype BondShareValidator oftype decimal {
+        constraints: [isValidBondShare];
+    }
+
+    constraint isValidCountryCode on CountryCodeValidator: value matches /^[A-Za-z]{3}$/;
+
+    constraint isPositiveGDP on GDPValueValidator: value > 0;
+
+    constraint isValidBondShare on BondShareValidator: value >= 0 and value <= 1;
+}
