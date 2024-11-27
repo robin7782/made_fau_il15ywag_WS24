@@ -1,3 +1,13 @@
 .DS_Store
+ 
 /data/*
 !/data/.gitkeep
+ 
+/data/*.db
+ 
+/project/data/*.db
+ 
+_pycache_/
+*.pyc
+ 
+kaggle.json
