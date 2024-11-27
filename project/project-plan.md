@@ -1,30 +1,61 @@
 # Project Plan
 
-## Title
-**"American Medical Costs Across Regions: A Comparative Study of Healthcare Expenses in North, Central, and South America"**
+## Title  
+**"Income and Housing: Can Americans Afford the Dream of Homeownership?"**
 
-## Main Question
-How do factors such as age, BMI, smoking status, and geographic region influence healthcare expenses in North America, and what can these insights tell us about healthcare access and equity across the Americas?
+## Main Question  
+What is the correlation between average income and housing prices in the United States, and how many Americans, based on income levels, can realistically afford to own a home in different regions?
 
-## Description
-The "American Medical Costs Across Regions" project focuses on understanding the variation in healthcare expenses across different regions, with an emphasis on North America, but also potentially extending insights to Central and South America. This project will examine how demographic factors, lifestyle choices, and regional disparities influence the cost of medical care. The goal is to understand the patterns in medical costs within these regions, identify disparities, and propose strategies to improve healthcare access and cost-efficiency.
-By analyzing relevant datasets that include variables such as age, BMI, smoking status, and region, this project will explore the key drivers of healthcare costs. The analysis will help uncover potential regional inequalities in healthcare expenses, influenced by both socio-economic and lifestyle factors. The goal is to provide insights that can inform healthcare policy, improve access to medical resources, and reduce disparities in healthcare expenses across the Americas.
+## Description  
+This project aims to analyze the relationship between income and housing prices in the U.S., focusing on regional disparities and affordability. By leveraging data on average income by ZIP code and housing prices across cities and states, the study seeks to determine the percentage of Americans who can realistically achieve homeownership based on their income levels.
 
-## Datasources
+The analysis will provide insights into how economic conditions vary regionally, affecting housing affordability and equity. It will identify which income groups face the greatest challenges in purchasing a home and offer recommendations to address affordability gaps.
 
-### Datasource-1: Medical Costs Dataset by WAQI786
-This dataset provides detailed information on medical costs across different individuals in the U.S., factoring in demographic details such as age, BMI, smoking status, and region. This dataset is critical in understanding how lifestyle factors (like smoking) and personal health conditions (such as BMI) affect the overall healthcare expenses of individuals. The data is instrumental in analyzing how healthcare costs vary across different demographics and regions within the U.S.
+---
 
-- **Metadata URL**: [Medical Costs Dataset Metadata](https://www.kaggle.com/datasets/waqi786/medical-costs)
-- **Data URL**: [Medical Costs Dataset CSV]https://www.kaggle.com/datasets/waqi786/medical-costs?select=medical_costs.csv
-- **Data Type**: CSV
+## Datasources  
 
-### Datasource-2: Medical Cost Dataset by Satyajeet Rai
-This dataset also focuses on healthcare expenses, with additional factors such as BMI, smoking status, and demographic details like age and region. The dataset includes more than 10,000 records and provides an in-depth analysis of how these variables contribute to the variance in healthcare costs, making it ideal for further comparison across different regions within the Americas.
+### Datasource-1: **American House Prices in different cities**  
+This dataset provides information on housing prices and demographics for major U.S. cities, helping identify regional trends in housing costs.  
+- **Metadata URL**: [American House Prices and Demographics Metadata](https://www.kaggle.com/datasets/jeremylarcher/american-house-prices-and-demographics-of-top-cities/data?select=American_Housing_Data_20231209)  
+- **Data URL**: (https://www.kaggle.com/datasets/jeremylarcher/american-house-prices-and-demographics-of-top-cities/data?select=American_Housing_Data_20231209.csv) 
+- **Data Type**: CSV  
 
-- **Metadata URL**: [Medical Cost Dataset Metadata](https://www.kaggle.com/datasets/satyajeetrai/medical-cost)
-- **Data URL**: [Medical Cost Dataset CSV] https://www.kaggle.com/datasets/satyajeetrai/medical-cost?select=dataset_.csv
-- **Data Type**: CSV
+### Datasource-2: **Average Income Per ZIP Code USA **  
+This dataset provides granular income data by ZIP code, essential for understanding housing affordability.  
+- **Metadata URL**: (https://www.kaggle.com/datasets/hamishgunasekara/average-income-per-zip-code-usa-2018)  
+- **Data URL**: (https://www.kaggle.com/datasets/hamishgunasekara/average-income-per-zip-code-usa-2018?select=postcode_level_averages.csv)  
+- **Data Type**: CSV  
 
+---
 
-## Work Packages
+## Work Packages  
+
+1. **Data Preparation and Cleaning**  
+   - Merge income and housing datasets based on ZIP codes or regional identifiers.  
+   - Clean data for inconsistencies or missing entries.  
+
+2. **Exploratory Data Analysis (EDA)**  
+   - Visualize trends in housing prices and average incomes across regions.  
+   - Compute metrics such as income-to-housing price ratios for affordability analysis.  
+
+3. **Affordability Analysis**  
+   - Define affordability benchmarks (e.g., a house is considered affordable if it costs 3–4 times the annual income).  
+   - Calculate the percentage of people in each ZIP code/region who can afford homes based on these benchmarks.  
+
+4. **Regional Insights**  
+   - Identify regions where housing affordability is lowest and highest.  
+   - Compare urban versus rural affordability rates.  
+
+5. **Feasibility Study**  
+   - Determine how income levels impact the ability to own a home in various states.  
+   - Analyze demographic factors (e.g., age, household size) that might influence homeownership rates.  
+
+6. **Recommendations and Insights**  
+   - Propose strategies to improve housing affordability for lower-income groups.  
+   - Highlight regions requiring urgent policy interventions to reduce affordability gaps.  
+
+---
+
+## Outcome  
+This project will quantify the percentage of Americans who can afford homes based on their income and the regional housing market. The findings will provide actionable insights for policymakers and stakeholders interested in addressing housing equity and affordability.
