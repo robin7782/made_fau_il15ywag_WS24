@@ -1,7 +1,7 @@
 # Project Plan
 
 ## Title  
-**"Income and Housing: Can Americans Afford the Dream of Homeownership?"**
+**"The Americas” Projects with relation to North-, Middle- or South-America"**
 
 ## Main Question  
 What is the correlation between average income and housing prices in the United States, and how many Americans, based on income levels, can realistically afford to own a home in different regions?
