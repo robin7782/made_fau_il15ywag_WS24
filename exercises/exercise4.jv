@@ -1,0 +1,108 @@
+pipeline MowestaDataPipeline {//declare the pipeline
+
+   // necessary steps written in every blocks.
+    //  data pipeline
+     MowestaDataExtractor 
+        -> ZipFileInterpreter
+        -> CSVFilePicker
+        -> CSVFileInterpreter
+        -> CSVFileTextInterpreter
+        -> RenameAtoEcolumn
+        -> RenameJKcolumn
+        -> SQLiteSchemaDesign
+        -> TemperatureColumnTransformer 
+        -> BatteryTemperatureColumnTransformer
+        -> LoadSQLiteDatabase;
+
+  // import from data source 
+    block MowestaDataExtractor oftype HttpExtractor{
+        url: "https://www.mowesta.com/data/measure/mowesta-dataset-20221107.zip";//import
+    }
+
+    block ZipFileInterpreter oftype ArchiveInterpreter{
+        archiveType: "zip";
+    }
+   
+    block CSVFilePicker oftype FilePicker {
+        path: "/data.csv";
+    }
+    
+    block CSVFileInterpreter oftype TextFileInterpreter {}
+    
+ 
+    block CSVFileTextInterpreter oftype CSVInterpreter {
+        delimiter: ";";
+    }
+  
+    // rename colum
+    block RenameAtoEcolumn oftype CellWriter {
+        at: range A1:E1;
+        write: ['id','producer','model','month','temperature'];//rename here by passing an arry
+    }
+ 
+    // rename again specefic colum
+    block RenameJKcolumn oftype CellWriter {
+        at: cell J1;
+        write: ['battery_temperature'];
+    }
+    
+     // convertion
+    transform CelsiusToFahrenheit {
+        from TemperatureInCelcius oftype decimal;
+        to TemperatureInFahrenheit oftype decimal;
+        TemperatureInFahrenheit: ((TemperatureInCelcius * 9/5) + 32);
+    }
+    
+    // calling method
+    block TemperatureColumnTransformer oftype TableTransformer {
+        inputColumns: ['temperature'];
+        outputColumn: 'temperature';
+        uses: CelsiusToFahrenheit;
+    }
+   
+   // calling again
+    block BatteryTemperatureColumnTransformer oftype TableTransformer {
+        inputColumns: ['battery_temperature'];
+        outputColumn: 'battery_temperature';
+        uses: CelsiusToFahrenheit;
+    }
+    
+ 
+    // Generate sql schema
+   
+    block SQLiteSchemaDesign oftype TableInterpreter {
+        header: true;
+        columns: [
+            "id" oftype ValidID,
+            "producer" oftype text,
+            "model" oftype text,
+            "month" oftype ValidMonth,
+            "temperature" oftype decimal,
+            "battery_temperature" oftype decimal, 
+        ];
+    }
+
+    // sql loader
+    block LoadSQLiteDatabase oftype SQLiteLoader {
+        table: "temperatures";
+        file: "temperatures.sqlite";
+    }
+
+
+ // validation
+
+    valuetype ValidMonth oftype integer {
+            constraints: [RangeMonth];
+        }
+
+     valuetype ValidID oftype integer {
+        constraints: [ValidNumber];
+    }
+ 
+
+
+    constraint RangeMonth on ValidMonth: value >=1 and value <= 12;
+    constraint ValidNumber on ValidID: value >=1;  
+   
+
+}
