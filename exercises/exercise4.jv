@@ -1,108 +1,81 @@
-pipeline MowestaDataPipeline {//declare the pipeline
+pipeline MobileTempData {
 
-   // necessary steps written in every blocks.
-    //  data pipeline
-     MowestaDataExtractor 
-        -> ZipFileInterpreter
-        -> CSVFilePicker
-        -> CSVFileInterpreter
-        -> CSVFileTextInterpreter
-        -> RenameAtoEcolumn
-        -> RenameJKcolumn
-        -> SQLiteSchemaDesign
-        -> TemperatureColumnTransformer 
-        -> BatteryTemperatureColumnTransformer
-        -> LoadSQLiteDatabase;
+    FetchZipFile -> ExtractArchive -> SelectCSVFile -> ParseTextFile
+        -> InterpretCSV -> UpdateMainHeaders -> UpdateBatteryTempHeader
+        -> ProcessDataTable -> ConvertTemperatureColumn -> ConvertBatteryTempColumn -> SaveToDatabase;
 
-  // import from data source 
-    block MowestaDataExtractor oftype HttpExtractor{
-        url: "https://www.mowesta.com/data/measure/mowesta-dataset-20221107.zip";//import
+    // Step 1: Download a zip file from a URL
+    block FetchZipFile oftype HttpExtractor {
+        url: "https://www.mowesta.com/data/measure/mowesta-dataset-20221107.zip";
     }
 
-    block ZipFileInterpreter oftype ArchiveInterpreter{
+    // Step 2: Extract the contents of the downloaded zip file
+    block ExtractArchive oftype ArchiveInterpreter {
         archiveType: "zip";
     }
-   
-    block CSVFilePicker oftype FilePicker {
+
+    // Step 3: Choose the specific CSV file from the extracted contents
+    block SelectCSVFile oftype FilePicker {
         path: "/data.csv";
     }
-    
-    block CSVFileInterpreter oftype TextFileInterpreter {}
-    
- 
-    block CSVFileTextInterpreter oftype CSVInterpreter {
+
+    // Step 4: Parse the raw text file for further processing
+    block ParseTextFile oftype TextFileInterpreter {}
+
+    // Step 5: Interpret the CSV file with a custom delimiter
+    block InterpretCSV oftype CSVInterpreter {
         delimiter: ";";
     }
-  
-    // rename colum
-    block RenameAtoEcolumn oftype CellWriter {
+
+    // Step 6: Rename the primary column headers for better readability
+    block UpdateMainHeaders oftype CellWriter {
         at: range A1:E1;
-        write: ['id','producer','model','month','temperature'];//rename here by passing an arry
+        write: ['id', 'producer', 'model', 'month', 'temperature'];
     }
- 
-    // rename again specefic colum
-    block RenameJKcolumn oftype CellWriter {
-        at: cell J1;
+
+    // Step 7: Rename the column for battery temperature
+    block UpdateBatteryTempHeader oftype CellWriter {
+        at: cell F1;
         write: ['battery_temperature'];
     }
-    
-     // convertion
-    transform CelsiusToFahrenheit {
-        from TemperatureInCelcius oftype decimal;
-        to TemperatureInFahrenheit oftype decimal;
-        TemperatureInFahrenheit: ((TemperatureInCelcius * 9/5) + 32);
+
+    // Step 8: Apply a formula to convert temperatures from Celsius to Fahrenheit
+    transform TempCtoF {
+        from CelsiusValue oftype decimal;
+        to FahrenheitValue oftype decimal;
+        FahrenheitValue: (CelsiusValue * 9 / 5) + 32;
     }
-    
-    // calling method
-    block TemperatureColumnTransformer oftype TableTransformer {
+
+    // Step 9: Transform the "temperature" column to Fahrenheit
+    block ConvertTemperatureColumn oftype TableTransformer {
         inputColumns: ['temperature'];
         outputColumn: 'temperature';
-        uses: CelsiusToFahrenheit;
+        uses: TempCtoF;
     }
-   
-   // calling again
-    block BatteryTemperatureColumnTransformer oftype TableTransformer {
+
+    // Step 10: Transform the "battery_temperature" column to Fahrenheit
+    block ConvertBatteryTempColumn oftype TableTransformer {
         inputColumns: ['battery_temperature'];
         outputColumn: 'battery_temperature';
-        uses: CelsiusToFahrenheit;
+        uses: TempCtoF;
     }
-    
- 
-    // Generate sql schema
-   
-    block SQLiteSchemaDesign oftype TableInterpreter {
+
+    // Step 11: Define table structure for final data processing
+    block ProcessDataTable oftype TableInterpreter {
         header: true;
         columns: [
-            "id" oftype ValidID,
+            "id" oftype integer,
             "producer" oftype text,
             "model" oftype text,
-            "month" oftype ValidMonth,
+            "month" oftype integer,
             "temperature" oftype decimal,
-            "battery_temperature" oftype decimal, 
+            "battery_temperature" oftype decimal,
         ];
     }
 
-    // sql loader
-    block LoadSQLiteDatabase oftype SQLiteLoader {
+    // Step 12: Save the transformed data into a SQLite database
+    block SaveToDatabase oftype SQLiteLoader {
         table: "temperatures";
         file: "temperatures.sqlite";
     }
-
-
- // validation
-
-    valuetype ValidMonth oftype integer {
-            constraints: [RangeMonth];
-        }
-
-     valuetype ValidID oftype integer {
-        constraints: [ValidNumber];
-    }
- 
-
-
-    constraint RangeMonth on ValidMonth: value >=1 and value <= 12;
-    constraint ValidNumber on ValidID: value >=1;  
-   
-
 }
