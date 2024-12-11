@@ -5,7 +5,7 @@ if [ ! -d "./project/data" ]; then
     mkdir -p "./project/data"
 fi
 
-# Run the pipeline
+# Run the pipeline....
 echo "Running pipeline.py..."
 python3 project/pipeline.py
 
