@@ -1,0 +1,70 @@
+pipeline GTFSPipeline {//declaration
+
+    GTFSExtractor
+        -> GTFSZipInterpreter
+        -> GTFSFilePicker
+        -> GTFSTextFileInterpreter
+        -> GTFSCSVInterpreter
+        -> GTFSTableInterpreter
+        -> LoadStopsDatabase;
+
+    // Call zip 
+    block GTFSExtractor oftype HttpExtractor {
+		url: "https://gtfs.rhoenenergie-bus.de/GTFS.zip";
+	}
+
+    block GTFSZipInterpreter oftype ArchiveInterpreter {
+        archiveType: "zip";
+    }
+
+    // pick specefic
+    block GTFSFilePicker oftype FilePicker {
+        path:"/stops.txt";
+    }
+
+	// Text Interpreter
+	block GTFSTextFileInterpreter oftype TextFileInterpreter {}
+
+	// CSV Interpreter
+	block GTFSCSVInterpreter oftype CSVInterpreter {
+		delimiter: ",";
+        enclosing: '"';
+	}
+
+    // validate  and return 
+    constraint is1925Zone on integer:
+        value == 1925;
+
+    valuetype SpecificZoneData oftype integer {
+        constraints: [is1925Zone];
+    }
+
+    // get and validate 
+    constraint GeoRangeNinety oftype RangeConstraint {
+        lowerBound: -90;
+        lowerBoundInclusive: true;
+        upperBound: 90;
+        upperBoundInclusive: true;
+    }
+
+    valuetype GeographicValidateData oftype decimal {
+        constraints: [GeoRangeNinety];
+    }
+
+    // SQLite schmea 
+    block GTFSTableInterpreter oftype TableInterpreter {
+        header: true;
+        columns:[
+            "stop_id" oftype integer,
+            "stop_name" oftype text,
+            "stop_lat" oftype GeographicValidateData,
+            "stop_lon" oftype GeographicValidateData,
+            "zone_id" oftype SpecificZoneData
+        ];
+    }
+
+    block LoadStopsDatabase oftype SQLiteLoader {
+        table: "stops";
+        file: "./gtfs.sqlite";
+    }
+}
